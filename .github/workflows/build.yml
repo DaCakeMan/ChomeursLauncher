@@ -7,6 +7,8 @@ on:
 jobs:
   create-release:
     runs-on: ubuntu-latest
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -31,7 +33,13 @@ jobs:
 
     strategy:
       matrix:
-        os: [macos-14, ubuntu-latest, windows-latest]
+        include:
+          - os: macos-14
+            artifact: "*.dmg"
+          - os: ubuntu-latest
+            artifact: "*.AppImage"
+          - os: windows-latest
+            artifact: "*.exe"
 
     steps:
       - name: Check out Git repository
@@ -53,6 +61,16 @@ jobs:
 
       - name: Build
         env:
-          GH_TOKEN: ${{ secrets.github_token }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm run build
         shell: bash
+
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create-release.outputs.upload_url }}
+          asset_path: ./dist/${{ matrix.artifact }}
+          asset_name: ${{ matrix.artifact }}
+          asset_content_type: application/octet-stream
