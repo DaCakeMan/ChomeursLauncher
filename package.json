@@ -1,7 +1,7 @@
 {
     "name": "ChômeursLauncher",
     "preductname": "Chômeurs Launcher",
-    "version": "0.1.2",
+    "version": "0.1.4",
     "description": "Official Launcher for Les Chômeurs Spacials community.",
     "main": "src/app.js",
     "author": {
