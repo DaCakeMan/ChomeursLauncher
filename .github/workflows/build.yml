@@ -7,8 +7,6 @@ on:
 jobs:
   create-release:
     runs-on: ubuntu-latest
-    outputs:
-      upload_url: ${{ steps.create_release.outputs.upload_url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -33,13 +31,7 @@ jobs:
 
     strategy:
       matrix:
-        include:
-          - os: macos-14
-            artifact_ext: dmg
-          - os: ubuntu-latest
-            artifact_ext: AppImage
-          - os: windows-latest
-            artifact_ext: exe
+        os: [macos-14, ubuntu-latest, windows-latest]
 
     steps:
       - name: Check out Git repository
@@ -61,17 +53,6 @@ jobs:
 
       - name: Build
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.github_token }}
         run: npm run build
         shell: bash
-
-      - name: Upload Release Asset
-        shell: bash
-        run: |
-          ASSET_PATH=$(find ./dist -name "*.${{ matrix.artifact_ext }}" | head -n 1)
-          echo "Found: $ASSET_PATH"
-          curl -s \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Content-Type: application/octet-stream" \
-            --data-binary @"$ASSET_PATH" \
-            "${{ needs.create-release.outputs.upload_url }}=$(basename $ASSET_PATH)"
