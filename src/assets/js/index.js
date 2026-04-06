@@ -30,8 +30,8 @@ class Splash {
 
     async startAnimation() {
         let splashes = [
-            { "message": "Pas de contexte : Et encore sur Instagram j'ai envoyé tellement pire a feyx mdrr", "author": "Cookie4Lion" },
-            { "message": "Un sage dindon a un jours dit : 'Le code est comme le chocolat, il faut en manger avec modération.' ... Nan j'en suis pas capable x) !", "author": "DaCakeMan" },
+            { "message": "Att j'vais t'envoyer un train !", "author": "Cookie4Lion" },
+            { "message": "Salut ! Je suis un launcher !", "author": "DaCakeMan" },
             { "message": "Les noirs c'est plus a la mode.", "author": "FeyxNope" }
         ];
         let splash = splashes[Math.floor(Math.random() * splashes.length)];
